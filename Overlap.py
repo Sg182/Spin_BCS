@@ -12,13 +12,16 @@ def overlap_XXZ(Delta,epsilon,eta):
         neighbour_sites = neighbor_square(x,y,Nx,Ny)
 
         for j in neighbour_sites:
-            prefactor_SzSz = (1/4)*((-1+epsilon[i].conjugate()*eta[i])*(-1+epsilon[j].conjugate()*eta[j]) )/((1 + epsilon[i].conjugate()*eta[i])*(1 + epsilon[j].conjugate()*eta[j])) # For Delta*S^z_i*S^z_j
 
-            prefactor_SxSx = (1/4)*((epsilon[i].conjugate()+eta[i])*(epsilon[j].conjugate()+eta[j]))/((1 + epsilon[i].conjugate()*eta[i])*(1 + epsilon[j].conjugate()*eta[j]))
+            if i>= j:
+                 # ensuring i < j to avoid double counting
+                prefactor_SzSz = (1/4)*((-1+epsilon[i].conjugate()*eta[i])*(-1+epsilon[j].conjugate()*eta[j]) )/((1 + epsilon[i].conjugate()*eta[i])*(1 + epsilon[j].conjugate()*eta[j])) # For Delta*S^z_i*S^z_j
 
-            prefactor_SySy = (-1/4)*((-1*epsilon[i].conjugate()+eta[i])*(-1*epsilon[j].conjugate()+eta[j]))/((1 + epsilon[i].conjugate()*eta[i])*(1 + epsilon[j].conjugate()*eta[j]))
+                prefactor_SxSx = (1/4)*((epsilon[i].conjugate()+eta[i])*(epsilon[j].conjugate()+eta[j]))/((1 + epsilon[i].conjugate()*eta[i])*(1 + epsilon[j].conjugate()*eta[j]))
 
-            total_overlap += prefactor_SxSx + prefactor_SySy + Delta*prefactor_SzSz # adding all the contributions due to summation in the Hamiltonian
+                prefactor_SySy = (-1/4)*((-1*epsilon[i].conjugate()+eta[i])*(-1*epsilon[j].conjugate()+eta[j]))/((1 + epsilon[i].conjugate()*eta[i])*(1 + epsilon[j].conjugate()*eta[j]))
+
+                total_overlap += prefactor_SxSx + prefactor_SySy + Delta*prefactor_SzSz # adding all the contributions due to summation in the Hamiltonian
 
     # BCS overlap
 
