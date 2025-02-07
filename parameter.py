@@ -1,3 +1,3 @@
-Nx = 5
-Ny = 5
-
+Nx = 4
+Ny = 4
+Delta = -1

@@ -1,4 +1,4 @@
-from module import *
+from neighbor import *
 
 def overlap_XXZ(Delta,epsilon,eta):
     total_overlap = 0
@@ -14,12 +14,13 @@ def overlap_XXZ(Delta,epsilon,eta):
         for j in neighbour_sites:
 
             if i>= j:
+                continue
                  # ensuring i < j to avoid double counting
-                prefactor_SzSz = (1/4)*((-1+epsilon[i].conjugate()*eta[i])*(-1+epsilon[j].conjugate()*eta[j]) )/((1 + epsilon[i].conjugate()*eta[i])*(1 + epsilon[j].conjugate()*eta[j])) # For Delta*S^z_i*S^z_j
+                prefactor_SzSz = (1/4)*((-1+epsilon[i-1].conjugate()*eta[i-1])*(-1+epsilon[j-1].conjugate()*eta[j-1]) )/((1 + epsilon[i-1].conjugate()*eta[i-1])*(1 + epsilon[j-1].conjugate()*eta[j-1])) # For Delta*S^z_i*S^z_j
 
-                prefactor_SxSx = (1/4)*((epsilon[i].conjugate()+eta[i])*(epsilon[j].conjugate()+eta[j]))/((1 + epsilon[i].conjugate()*eta[i])*(1 + epsilon[j].conjugate()*eta[j]))
+                prefactor_SxSx = (1/4)*((epsilon[i-1].conjugate()+eta[i-1])*(epsilon[j-1].conjugate()+eta[j-1]))/((1 + epsilon[i-1].conjugate()*eta[i-1])*(1 + epsilon[j-1].conjugate()*eta[j-1]))
 
-                prefactor_SySy = (-1/4)*((-1*epsilon[i].conjugate()+eta[i])*(-1*epsilon[j].conjugate()+eta[j]))/((1 + epsilon[i].conjugate()*eta[i])*(1 + epsilon[j].conjugate()*eta[j]))
+                prefactor_SySy = (-1/4)*((-1*epsilon[i-1].conjugate()+eta[i-1])*(-1*epsilon[j-1].conjugate()+eta[j-1]))/((1 + epsilon[i-1].conjugate()*eta[i-1])*(1 + epsilon[j-1].conjugate()*eta[j-1]))
 
                 total_overlap += prefactor_SxSx + prefactor_SySy + Delta*prefactor_SzSz # adding all the contributions due to summation in the Hamiltonian
 
@@ -30,4 +31,13 @@ def overlap_XXZ(Delta,epsilon,eta):
         bcs_overlap *= ( 1+ epsilon[k].conjugate()*eta[k])
 
     return total_overlap*bcs_overlap
-~                                 
+
+def bcs_overlap(epsilon,eta):
+    overlap = 1
+    for k in range(len(eta)):
+        overlap *= ( 1+ epsilon[k].conjugate()*eta[k])
+
+    return overlap
+
+
+                             

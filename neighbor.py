@@ -46,12 +46,12 @@ def neighbor_square(x,y,Nx,Ny):
 
     # Nested site_index function
     def site_index(x, y, Nx, Ny):
-        """Maps (x, y) coordinates to a single index."""
+        
         return (x - 1) * Nx + y
     
     sites = []
 
-    # Right neighbor (x+1, y), wrapping around if x+1 > Nx
+     
     new_x = (x % Nx) + 1  # Wrap around
     sites.append(site_index(new_x, y, Nx, Ny))
 
@@ -59,7 +59,7 @@ def neighbor_square(x,y,Nx,Ny):
     new_x = (x - 2) % Nx + 1  # Wrap around
     sites.append(site_index(new_x, y, Nx, Ny))
 
-    # Up neighbor (x, y+1), wrapping around if y+1 > Ny
+     
     new_y = (y % Ny) + 1  # Wrap around
     sites.append(site_index(x, new_y, Nx, Ny))
 
@@ -69,9 +69,4 @@ def neighbor_square(x,y,Nx,Ny):
 
     return sites'''
 
-Nx = 4
-Ny = 4
-N = Nx*Ny
-
-nearest_neighbour = neighbor_square(3,1,Nx,Ny)
-print(nearest_neighbour)
+ 
