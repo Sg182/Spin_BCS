@@ -8,7 +8,7 @@ def inverse_mapping(i, Ny):
 
 
 
-def neighbor_square(x,y,Nx,Ny):
+def neighbor_square(x,y,Nx,Ny): ## Periodic Boundary cond.
     sites = list()
 
     def map_square(x,y,Nx,Ny):
@@ -69,4 +69,31 @@ def neighbor_square(x,y,Nx,Ny):
 
     return sites'''
 
+def second_neighbor(x,y,Nx,Ny):  ## PBC # x rep rows, y columns    ## ((x+-1)-1)%Nx + 1
+    sites = []
+
+    def map_square(x,y,Nx,Ny):
+        return ((x-1)*Nx +y)
+    if Nx != 1:
+
+    # Diagonal neighbors (x ± 1, y ± 1)
+        sites.append(map_square((x + 1 - 1) % Nx + 1, (y + 1 - 1) % Ny + 1, Nx, Ny))
+        sites.append(map_square((x + 1 - 1) % Nx + 1, (y - 1 - 1) % Ny + 1, Nx, Ny))
+        sites.append(map_square((x - 1 - 1) % Nx + 1, (y + 1 - 1) % Ny + 1, Nx, Ny))
+        sites.append(map_square((x - 1 - 1) % Nx + 1, (y - 1 - 1) % Ny + 1, Nx, Ny))
+
+    else:
+    # Next-nearest along the same row or column (x ± 2, y ± 2)
+    ##sites.add(map_square((x + 2 - 1) % Nx + 1, y, Nx, Ny))
+    ##sites.add(map_square((x - 2 - 1) % Nx + 1, y, Nx, Ny))
+        sites.add(map_square(x, (y + 2 - 1) % Ny + 1, Nx, Ny))
+        sites.add(map_square(x, (y - 2 - 1) % Ny + 1, Nx, Ny))
+
+    return list(sites)
+
  
+
+    
+
+
+

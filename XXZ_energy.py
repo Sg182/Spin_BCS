@@ -25,7 +25,7 @@ for i in range(1,Nx*Ny+1):  # This calculates Sz for each site
     Sz_sum += Sz(eta_optimized,eta_optimized,i)/bcs_overlap(eta_optimized,eta_optimized)
 
 print("The global Sz is:",Sz_sum)
-print("The overlap XXZ", overlap_XXZ(Delta, eta_optimized, eta_optimized))
+ 
 
 
 
