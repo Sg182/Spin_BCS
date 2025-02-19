@@ -16,6 +16,8 @@ def complex_to_real(arr):
 
     ''' intakes n complex numbers and returns 2n real numbers'''
     arr = np.asarray(arr)
+    if len(arr) % 2 != 0:
+        raise ValueError("The number of elemets in the array must be even")
     arr1 = np.column_stack((arr.real,arr.imag)) # see np.column_stack((arr1,arr2)) method
     arr_real = arr1.ravel()   # array.ravel() flattens the array,
 
