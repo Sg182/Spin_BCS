@@ -12,7 +12,6 @@ def energy_bcs_XXZ(eta,Delta):
 
 eta_file = "eta_optimized.txt"
 
-
 if os.path.exists(eta_file): # checks if the file exists or not
     eta_initial = np.loadtxt(eta_file) # load eta_optimized from the file
 
@@ -36,7 +35,11 @@ for i in range(1,Nx*Ny+1):  # This calculates Sz for each site
 
 #print("The global Sz is:",Sz_sum)
 
-np.savetxt(eta_file,eta_optimized) # save the eta_optimized in the .txt
+#np.savetxt(eta_file,eta_optimized) # save the eta_optimized in the .txt
+
+with open(eta_file,"w") as file: # save the eta_optimized in the .txt
+    for eta in eta_optimized:
+        file.write(f"{eta}\n")
 
 with open("energy_XXZ.txt","a") as file:  # saves the result to .txt file
     file.write(f"{Delta}    {final_energy}\n")
