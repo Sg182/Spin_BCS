@@ -1,11 +1,18 @@
-#!/bin/bash
+#!/bin/zsh
  
-start=-2.0
-end=2.0
-step=0.1
+start=-1.5
+end=1.5
+step=0.05
+
+OUTFILE="energy_XXZ.txt"
+
+echo -e "Delta\t\tEnergy" > "$OUTFILE"
 
 for Delta in $(seq $start $step $end); do
-    /Users/swarnamoyghosh/anaconda3/bin/python XXZ_energy.py $Delta
+    sed -i '' "s/^ *Delta *=.*/Delta=$Delta/" parameter.py
+    echo "$Delta"
+    /Users/swarnamoyghosh/anaconda3/envs/drudge/bin/python3 XXZ_energy.py
+    
 done
 
-echo "Done!"
+echo "completed!"

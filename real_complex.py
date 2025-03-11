@@ -22,6 +22,7 @@ def complex_to_real(arr):
     arr_real = arr1.ravel()   # array.ravel() flattens the array,
 
     return arr_real
+    
 
 #arr = real_to_complex([1,2,3,4,8,9])
 #print(complex_to_real(arr))
