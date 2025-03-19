@@ -1,54 +1,93 @@
-from Overlap import *
+from overlap_uv import *
+from parameter import *
 import numpy as np
+from Gradient import Total_Gradient_XXZ_1D
 from scipy.optimize import minimize
 import os
-from parameter import *
-#import sys
-#Delta = -1.0 #float(sys.argv[1])  # Read Delta from command-line argument
-#Nsite = Nx*Ny
-#print(f"The total number of sites are {Nsite}")
+import sys
 
-def energy_bcs_XXZ(eta,Delta):
-    return (overlap_XXZ(Delta,eta,eta))/(bcs_overlap(eta,eta))
 
-eta_file = "eta_optimized.txt"
 
-if os.path.exists(eta_file): # checks if the file exists or not
-    eta_initial = np.loadtxt(eta_file) # load eta_optimized from the file
 
-else:   # otherwise do an intial guess
-    eta_initial = np.random.uniform(-1,1,Nx*Ny) 
-
-def Sz_sum(eta):
-    Sz_global= 0
-    for i in range(1,Nsites+1):  # This calculates Sz for each site 
-    #print(Sz(eta_optimized,eta_optimized,i)/bcs_overlap(eta_optimized,eta_optimized))  
-        Sz_global += Sz(eta,eta,i)/bcs_overlap(eta,eta)
-    return Sz_global
-
-# Define constraint dictionary
-constraint = {'type': 'eq', 'fun': Sz_sum}
-
-# Perform minimization with Sz = 0 constraint
-result = minimize(energy_bcs_XXZ, eta_initial, args=(Delta,), method='SLSQP', constraints=constraint)
-
-# initialize minimization 
-#result = minimize(energy_bcs_XXZ, eta_initial, args=(Delta,), method='BFGS')
-
-eta_optimized = result.x
-final_energy = result.fun
-
-print(f"The Energy for {Delta}:  {final_energy}")
-#print(f"The global Sz is: {Sz_sum(eta_optimized)}")
-
-#np.savetxt(eta_file,eta_optimized) # save the eta_optimized in the .txt
-
-with open(eta_file,"w") as file: # save the eta_optimized in the .txt
-    for eta in eta_optimized:
-        file.write(f"{eta}\n")
-
-with open("energy_XXZ_1D_12.txt","a") as file:  # saves the result to .txt file
-    file.write(f"{Delta}    {final_energy:.12f}\n")
+def XXZ_1D_energy(theta,Nsites,Delta):  # function to calculate XXZ_Energy in 1D
+    return (XXZ_1D_overlap(theta,Nsites,Delta))
 
     
-  
+def Sz_sum(theta,Nsites):
+    Sz_global= 0
+    for i in range(Nsites):  # This calculates Sz for each site 
+    #print(Sz(eta_optimized,eta_optimized,i)/bcs_overlap(eta_optimized,eta_optimized))  
+        Sz_global += Sz(theta,Nsites,i)
+    return Sz_global/bcs_overlap(theta,Nsites)
+
+
+#---------------------------------------------------------------------------------------------------------#
+'''This section loads the etas of the previous calculation as an initial guess for the current calculation.
+If the file doesn't exist, it creates a folder'''
+
+
+'''theta_file = 'theta_opt.txt'
+
+if os.path.exists(theta_file):
+    theta_initial = np.loadtxt(theta_file)
+
+else:
+     theta_initial = np.random.uniform(-np.pi,np.pi,Nsites)'''
+
+best_obj = np.inf
+best_theta = None
+
+for i in range(100):
+    theta0 = np.random.uniform(-np.pi,np.pi, Nsites)
+    #theta0 = np.array([0,0,0,np.pi/2,np.pi/2,np.pi/2])
+    
+# ----------------------------------------------------------------------------------------------------------------#
+# Prepare the result data to write to file
+    '''log_file = 'log.txt'
+    sys.stdout = open(log_file,'w')'''
+# ----------------------------------------------------------------------------------------------------------------#
+    E_before = XXZ_1D_energy(theta0,Nsites,Delta)
+
+
+#-----------------------------------------------------------------------------------------------------------------#
+ 
+# Define constraint dictionary
+    constraint = {'type': 'eq', 'fun': lambda theta :Sz_sum(theta,Nsites)}  #Using Lambda function since Sz_sum has two arguments
+
+# Perform minimization with Sz = 0 constraint
+    #result = minimize(XXZ_1D_energy, theta0, args=(Nsites,Delta,), method='trust-constr',jac=Total_Gradient_XXZ_1D, constraints=constraint,\
+    #              options={'xtol':1e-14,'maxiter':2000})
+    result = minimize(XXZ_1D_energy, theta0, args=(Nsites,Delta,), constraints=constraint,\
+                  options={'xtol':1e-14,'maxiter':2000})
+    #theta_optimized = result.x
+    final_energy = result.fun
+    print(f"run {i+1}: Energy_before : {E_before} Energy : {final_energy}")
+
+    if final_energy < best_obj:
+        best_obj = final_energy
+        best_theta = result.x
+
+#--------------------------------------------------------------------------------------------------------------------#
+
+ 
+'''with open(theta_file,'w') as file:     #overwriting the etas in the .txt file
+    for theta in theta_optimized:
+        file.write(f"{theta}\n")'''
+
+#sys.stdout.close()
+'''for theta in theta_optimized:
+    print(f"{np.cos(theta)}\t{np.sin(theta)}\n")'''
+
+with open('energy_1D_12_XXZ_new.txt',"a") as file:      # writing the energy to a text file
+    file.write(f"{Delta}   {best_obj:.12f}\n")
+
+sys.stdout = sys.__stdout__
+
+if result.success:
+    print('optimization successful!')
+else:
+    print("Warning! optimization failed: ", result.message)
+ 
+print(bcs_overlap(theta0,Nsites))
+print(f"The Energy for {Delta}:  {best_obj:.12f}")
+print(f"The global Sz is: {Sz_sum(best_theta,Nsites)}")
