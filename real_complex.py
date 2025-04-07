@@ -16,14 +16,18 @@ def complex_to_real(arr):
 
     ''' intakes n complex numbers and returns 2n real numbers'''
     arr = np.asarray(arr)
-    if len(arr) % 2 != 0:
-        raise ValueError("The number of elemets in the array must be even")
+     
     arr1 = np.column_stack((arr.real,arr.imag)) # see np.column_stack((arr1,arr2)) method
     arr_real = arr1.ravel()   # array.ravel() flattens the array,
 
     return arr_real
     
 
-#arr = real_to_complex([1,2,3,4,8,9])
-#print(complex_to_real(arr))
+x = np.array([1.0, 2.0, 3.0, 4.0,1.0,6])
+z = real_to_complex(x)         # [1.+2.j 3.+4.j]
+x_back = complex_to_real(z)    # [1. 2. 3. 4.]
+
+print("z:", z)
+print("x_back:", x_back)
+
 
