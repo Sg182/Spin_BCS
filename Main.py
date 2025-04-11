@@ -9,10 +9,11 @@ import sys
 
 
 
-def Energy(theta,Nsites,Delta):  # function to calculate XXZ_Energy in 1D
+def Energy(var,Nsites,Delta):  # function to calculate XXZ_Energy in 1D
     ham.theta = theta
     ham.Nsites = Nsites
-
+    theta = var[:Nsites]
+    phi = var[Nsites:]
     return (ham.J1J2_2D_overlap(Delta))  #Change the Hamiltonian accordingly
     #return (ham.XXZ_overlap(Delta))
     
