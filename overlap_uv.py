@@ -97,8 +97,9 @@ def J1J2_2D_overlap(theta,Nsites,J):  # function to calculate XXZ_Energy in 1D
  
 
 class BCSHamiltonian:
-    def __init__(self, theta, Nx, Ny):
+    def __init__(self, theta,phi, Nx, Ny):
         self.theta = theta
+        self.phi = phi
         self.Nx = Nx
         self.Ny = Ny
         self.Nsites = Nx * Ny
