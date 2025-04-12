@@ -121,7 +121,7 @@ class BCSHamiltonian:
 
     def Splus_Sminus(self, p, q):
         return np.cos(self.theta[p]) * np.sin(self.theta[p]) * \
-               np.cos(self.theta[q]) * np.sin(self.theta[q])
+               np.cos(self.theta[q]) * np.sin(self.theta[q])*(np.exp(1j*(self.phi[q]-self.phi[p]) ))
 
     def S_zS_z(self, p, q):
         cp, sp = np.cos(self.theta[p])**2, np.sin(self.theta[p])**2
@@ -130,7 +130,7 @@ class BCSHamiltonian:
         denominator = (cp + sp) * (cq + sq)
         return 0.25 * numerator / denominator
 
-    def XXZ_overlap(self, Delta):
+    def XXZ_overlap(self, Delta):   # add another argument 'periodic=True' and divide the body of the function with periodic/non periodic 
         sum_energy = 0
         for i in range(1, self.Nsites + 1):
             x, y = inverse_mapping(i, self.Ny)
