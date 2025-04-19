@@ -211,26 +211,28 @@ def second_neighbor_triangular(x, y, Nx, Ny, periodic=True):
     if periodic:
         if (x - 1) % 2 == 0:  # even row
             neighbor_offsets = [(-2, 0), (-1, -1), (-1, 2), 
-                                (0, -2), (0, 2), 
+                                
                                 (1, -1), (1, 2), (2, 0)]
         else:  # odd row
             neighbor_offsets = [(-2, 0), (-1, -2), (-1, 1),
-                                (0, -2), (0, 2),
+                                 
                                 (1, -2), (1, 1), (2, 0)]
 
         for dx, dy in neighbor_offsets:
             new_x = (x - 1 + dx) % Nx + 1
             new_y = (y - 1 + dy) % Ny + 1
             sites.append(map_square(new_x, new_y, Nx, Ny))
+            print(map_square(new_x, new_y, Nx, Ny))
+        
 
     else:  # open boundary conditions
         if (x - 1) % 2 == 0:  # even row
             neighbor_offsets = [(-2, 0), (-1, -1), (-1, 2),
-                                (0, -2), (0, 2),
+                                 
                                 (1, -1), (1, 2), (2, 0)]
         else:  # odd row
             neighbor_offsets = [(-2, 0), (-1, -2), (-1, 1),
-                                (0, -2), (0, 2),
+                                 
                                 (1, -2), (1, 1), (2, 0)]
 
         for dx, dy in neighbor_offsets:
@@ -245,8 +247,8 @@ def second_neighbor_triangular(x, y, Nx, Ny, periodic=True):
 
      
 
-neig_pbc  = second_neighbor_triangular(2,3,4,4,periodic=True)
-neig_obc  = second_neighbor_triangular(2,3,4,4,periodic=False)
+neig_pbc  = neighbor_triangular(3,3,4,4,periodic=True)
+neig_obc  = second_neighbor_triangular(3,3,4,4,periodic=True)
 print(neig_pbc)
 print(neig_obc)
 
