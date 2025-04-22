@@ -139,7 +139,7 @@ class BCSHamiltonian:
                 if i >= j:
                     continue
                 p, q = i - 1, j - 1
-                sum_energy += self.Splus_Sminus(p, q) + Delta * self.S_zS_z(p, q)
+                sum_energy += 0.5*(self.Splus_Sminus(p, q) + np.conjugate(self.Splus_Sminus(p,q))) + Delta * self.S_zS_z(p, q)
         return sum_energy
 
     def J1J2_2D_overlap(self, J):
