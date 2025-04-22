@@ -51,7 +51,7 @@ best_theta = None
 for i in range(100):
     theta0 = np.random.uniform(-np.pi,np.pi, Nsites)
     phi0 = np.random.uniform(-np.pi, np.pi, Nsites)
-    var0 = np.concatenate([theta0, phi0])
+    var0 = np.concatenate([theta0, phi0])   #this array contains theta and phi (so it includes complex BCS parameters)
 
 
     #theta0 = np.array([np.pi/4,-np.pi/4,np.pi/4,-np.pi/4,np.pi/4,-np.pi/4,
