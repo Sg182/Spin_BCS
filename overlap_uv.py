@@ -154,7 +154,7 @@ class BCSHamiltonian:
                 if i >= j:
                     continue
                 p, q = i - 1, j - 1
-                total_overlap_J1 += self.Splus_Sminus(p, q) + self.S_zS_z(p, q)
+                total_overlap_J1 +=  0.5*(self.Splus_Sminus(p, q) + np.conjugate(self.Splus_Sminus(p,q))) + self.S_zS_z(p, q)
 
         # Second nearest neighbors
         for i in range(1, self.Nsites + 1):
@@ -164,6 +164,6 @@ class BCSHamiltonian:
                 if i >= j:
                     continue
                 p, q = i - 1, j - 1
-                total_overlap_J2 += J * (self.Splus_Sminus(p, q) + self.S_zS_z(p, q))
+                total_overlap_J2 += (0.5*(self.Splus_Sminus(p, q) + np.conjugate(self.Splus_Sminus(p,q))) + self.S_zS_z(p, q))
 
-        return total_overlap_J1 + total_overlap_J2
+        return total_overlap_J1 + J*total_overlap_J2
