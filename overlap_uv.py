@@ -108,7 +108,7 @@ class BCSHamiltonian:
         overlap = 1
         for k in range(self.Nsites):
             overlap *= (np.cos(self.theta[k])**2 + np.sin(self.theta[k])**2)
-        return overlap
+        return 1.0
 
     def Sz(self, i):
      
@@ -130,11 +130,11 @@ class BCSHamiltonian:
         denominator = (cp + sp) * (cq + sq)
         return 0.25 * numerator / denominator
 
-    def XXZ_overlap(self, Delta):   # add another argument 'periodic=True' and divide the body of the function with periodic/non periodic 
+    def XXZ_overlap(self, Delta,periodic=False):   # add another argument 'periodic=True' and divide the body of the function with periodic/non periodic 
         sum_energy = 0
         for i in range(1, self.Nsites + 1):
             x, y = inverse_mapping(i, self.Ny)
-            neighbors = neighbor_square(x, y, self.Nx, self.Ny)
+            neighbors = neighbor_square(x, y, self.Nx, self.Ny,periodic)
             for j in neighbors:
                 if i >= j:
                     continue
@@ -142,24 +142,24 @@ class BCSHamiltonian:
                 sum_energy += 0.5*(self.Splus_Sminus(p, q) + np.conjugate(self.Splus_Sminus(p,q))) + Delta * self.S_zS_z(p, q)
         return sum_energy
 
-    def J1J2_2D_overlap(self, J):
+    def J1J2_2D_overlap(self, J,periodic=False):
         total_overlap_J1 = 0
         total_overlap_J2 = 0
-
+         
         # First nearest neighbors
-        for i in range(1, self.Nsites + 1):
+        '''for i in range(1, self.Nsites + 1):
             x, y = inverse_mapping(i, self.Ny)
             neighbors = neighbor_square(x, y, self.Nx, self.Ny)
             for j in neighbors:
                 if i >= j:
                     continue
                 p, q = i - 1, j - 1
-                total_overlap_J1 +=  0.5*(self.Splus_Sminus(p, q) + np.conjugate(self.Splus_Sminus(p,q))) + self.S_zS_z(p, q)
-
+                total_overlap_J1 +=  0.5*(self.Splus_Sminus(p, q) + np.conjugate(self.Splus_Sminus(p,q))) + self.S_zS_z(p, q)'''
+        total_overlap_J1 = self.XXZ_overlap(Delta=1,periodic=periodic)
         # Second nearest neighbors
         for i in range(1, self.Nsites + 1):
             x, y = inverse_mapping(i, self.Ny)
-            neighbors = second_neighbor(x, y, self.Nx, self.Ny)
+            neighbors = second_neighbor(x, y, self.Nx, self.Ny,periodic)
             for j in neighbors:
                 if i >= j:
                     continue

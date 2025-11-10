@@ -1,5 +1,5 @@
-Nx = 1    # For 1D, always set Nx=1
-Ny = 8
+Nx = 1   # FOR 1D, ALWAYS SET Nx=1
+Ny = 6
 Nsites = Nx*Ny
-Delta=1.5
-J = 0.0
+Delta = 1
+J=Delta

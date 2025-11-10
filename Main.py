@@ -6,7 +6,8 @@ from scipy.optimize import minimize
 import os
 import sys
 
-
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def Energy(var,Nsites,Delta):  # function to calculate XXZ_Energy in 1D
@@ -15,7 +16,7 @@ def Energy(var,Nsites,Delta):  # function to calculate XXZ_Energy in 1D
     ham.theta = theta
     ham.phi = phi
     ham.Nsites = Nsites
-    return (ham.XXZ_overlap(Delta))  #Change the Hamiltonian accordingly
+    return (ham.J1J2_2D_overlap(Delta,periodic=False))  #Change the Hamiltonian accordingly
     #return (ham.XXZ_overlap(Delta))
     
 def Sz_sum(var,Nsites):
@@ -69,7 +70,7 @@ for i in range(100):
 #-----------------------------------------------------------------------------------------------------------------#
  
 # Define constraint dictionary
-    constraint = {'type': 'eq', 'fun': lambda theta :Sz_sum(theta,Nsites)}  #Using Lambda function since Sz_sum has two arguments
+    constraint = {'type': 'eq', 'fun': lambda var0 :Sz_sum(var0,Nsites)}  #Using Lambda function since Sz_sum has two arguments
 
 # Perform minimization with Sz = 0 constraint
     #result = minimize(XXZ_1D_energy, theta0, args=(Nsites,Delta,), method='trust-constr',jac=Total_Gradient_XXZ_1D, constraints=constraint,\
@@ -97,7 +98,7 @@ for i in range(100):
 '''for theta in theta_optimized:
     print(f"{np.cos(theta)}\t{np.sin(theta)}\n")'''
 
-with open('energy_4x4_XXZ_new.txt',"a") as file:      # writing the energy to a text file
+with open('energy_sfs__4x4_XXZ_new.txt',"a") as file:      # writing the energy to a text file
     file.write(f"{Delta}   {best_obj:.12f}\n")
 
 sys.stdout = sys.__stdout__
@@ -106,7 +107,11 @@ if result.success:
     print('optimization successful!')
 else:
     print("Warning! optimization failed: ", result.message)
+
+ham.theta = best_theta
+ham.phi   = best_phi
+ham.Nsites = Nsites
 #ham.theta = best_theta
-print(ham.bcs_overlap())
-print(f"The Energy for {Delta}:  {best_obj:.12f}")
+print("The Overlap is ",ham.bcs_overlap())
+print(f"The Energy for {Delta}:  {best_obj.real:.12f}")
 print(f"The global Sz is: {Sz_sum(best_var,Nsites)}")
